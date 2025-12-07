@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		B65E0B342EE60AD300836F59 /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = B65E0B332EE60AD300836F59 /* SDWebImageSwiftUI */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		B65E0AA42EE4A75900836F59 /* boardGameReview.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = boardGameReview.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -23,6 +27,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B65E0B342EE60AD300836F59 /* SDWebImageSwiftUI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -65,6 +70,7 @@
 			);
 			name = boardGameReview;
 			packageProductDependencies = (
+				B65E0B332EE60AD300836F59 /* SDWebImageSwiftUI */,
 			);
 			productName = boardGameReview;
 			productReference = B65E0AA42EE4A75900836F59 /* boardGameReview.app */;
@@ -94,6 +100,9 @@
 			);
 			mainGroup = B65E0A9B2EE4A75900836F59;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				B65E0B322EE60AD300836F59 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = B65E0AA52EE4A75900836F59 /* Products */;
 			projectDirPath = "";
@@ -324,6 +333,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		B65E0B322EE60AD300836F59 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SDWebImage/SDWebImageSwiftUI";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.1.4;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		B65E0B332EE60AD300836F59 /* SDWebImageSwiftUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B65E0B322EE60AD300836F59 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */;
+			productName = SDWebImageSwiftUI;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = B65E0A9C2EE4A75900836F59 /* Project object */;
 }
