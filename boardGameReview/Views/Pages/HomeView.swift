@@ -8,8 +8,30 @@
 import SwiftUI
 
 struct HomeView: View {
+    @StateObject var boardGameViewModel = BoardGameViewModel()
+    @State var boardGames: [BoardGameModel] = []
+    let userID = 1
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        ScrollView {
+            LazyVStack {
+                ForEach(boardGames) { boardGame in
+                    BoardGameCardView(boardGame: boardGame)
+                    
+                        .onAppear() {
+                            if boardGame.id == boardGames.last?.id {
+                                Task { boardGames = await boardGameViewModel.fetchBoardGames(userID)
+                                }
+                            }
+                        }
+                }
+            }
+        }
+        .onAppear() {
+            Task {
+                boardGames = await boardGameViewModel.fetchBoardGames(1)
+                print(boardGames.count)
+            }
+        }
     }
 }
 

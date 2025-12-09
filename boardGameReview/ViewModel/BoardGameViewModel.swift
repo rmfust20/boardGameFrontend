@@ -13,20 +13,22 @@ class BoardGameViewModel: ObservableObject {
     @Published var boardGame : BoardGameModel? = nil
     @Published var LastSeenID: Int? = nil
     
-    init(boardGameService: BoardGameService = BoardGameService(baseURL: "http://127.0.0.1:8000/boardGames")) {
+    init(boardGameService: BoardGameService = BoardGameService()) {
         self.boardGameService = boardGameService
     }
     
     @MainActor
-    func fetchBoardGames(_ userID : Int) async -> String {
-        let fetchedBoardGames = try? await boardGameService.fetchBoardGameFeedForUser(String(userID), LastSeenID)
+    func fetchBoardGames(_ userID : Int) async -> [BoardGameModel] {
+        let url = "http://127.0.0.1:8000/boardGames/user/\(userID)"
+        let fetchedBoardGames = try? await boardGameService.fetchBoardGameFeedForUser(String(userID), url,  LastSeenID)
         if let fetchedBoardGames = fetchedBoardGames {
+            print(fetchedBoardGames[0].name)
             self.boardGames.append(contentsOf: fetchedBoardGames)
             LastSeenID = boardGames.last?.id
-            return "Success"
+            return boardGames
         }
         else {
-            return "Failed to fetch board games."
+            return []
         }
     }
     

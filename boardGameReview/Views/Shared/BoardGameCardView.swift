@@ -9,23 +9,42 @@ import SwiftUI
 import SDWebImageSwiftUI
 
 struct BoardGameCardView: View {
-    let image : String = ""
-    let title: String = "Sample Title Until Robert Adds this"
-    var rating: Int = 0
-    let imageUrl = URL(string: "https://cf.geekdo-images.com/rpwCZAjYLD940NWwP3SRoA__small/img/YT6svCVsWqLrDitcMEtyazVktbQ=/fit-in/200x150/filters:strip_icc()/pic4718279.jpg")!
+    let boardGame: BoardGameModel
     var body: some View {
         HStack {
-            WebImage(url: imageUrl)
+            WebImage(url: URL(string: boardGame.thumbnail ?? "Nothing"))
                         .resizable()
                         .scaledToFit()
-                        .frame(width: 200, height: 400)
+                        .frame(width: 100, height: 100)
                         .clipped()
-            Text(title)
-                
+            VStack(alignment: .leading, spacing: 14) {
+                Text(boardGame.name)
+                    .font(.system(size:15))
+                WantToPlayButtonView()
+                RateThisGameView()
+            }
         }
+        .padding()
+        .padding(.bottom,30)
+        .background(
+            RoundedRectangle(cornerRadius: 2)
+                .stroke(Color.gray, lineWidth: 1)
+                .opacity(0.5)
+        )
     }
 }
 
 #Preview {
-    BoardGameCardView()
+    BoardGameCardView(boardGame: BoardGameModel(
+        id: 1,
+        name: "Die Macher",
+        thumbnail: "https://cf.geekdo-images.com/rpwCZAjYLD940NWwP3SRoA__small/img/YT6svCVsWqLrDitcMEtyazVktbQ=/fit-in/200x150/filters:strip_icc()/pic4718279.jpg",
+        play_time: 60,
+        min_players: 3,
+        max_players: 4,
+        year_published: 1995,
+        description: "Trade, build, and settle the island of Catan.",
+        min_age: 10,
+        image: "https://example.com/catan-image.jpg"
+    ))
 }

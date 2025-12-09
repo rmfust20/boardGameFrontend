@@ -1,17 +1,14 @@
 import Foundation
 
 struct BoardGameService {
-    let baseURL: String
     let client: APIClient
 
-    init(baseURL: String, client: APIClient = APIClient.shared) {
-        self.baseURL = baseURL
+    init(client: APIClient = APIClient.shared) {
         self.client = client
     }
 
-    func fetchBoardGameFeedForUser(_ userID: String, _ lastSeenID: Int?) async throws -> [BoardGameModel] {
-        var urlComponents = URLComponents(string: baseURL)!
-        urlComponents.queryItems = [URLQueryItem(name: "userID", value: userID)]
+    func fetchBoardGameFeedForUser(_ userID: String, _ url: String, _ lastSeenID: Int?) async throws -> [BoardGameModel] {
+        var urlComponents = URLComponents(string: url)!
         if let lastSeenID = lastSeenID {
             urlComponents.queryItems?.append(URLQueryItem(name: "lastSeenID", value: "\(lastSeenID)"))
         }
