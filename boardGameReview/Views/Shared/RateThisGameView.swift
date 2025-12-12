@@ -8,21 +8,32 @@
 import SwiftUI
 
 struct RateThisGameView: View {
+    @Binding var isPresented: Bool
     var body: some View {
-        HStack {
-            Text("Rate this game:")
-                .foregroundStyle(Color.gray)
-                .font(.system(size:13))
-            ForEach(0..<5) { _ in
-                Image(systemName: "star.fill")
-                    .foregroundStyle(Color.gray)
-                    .opacity(0.25)
-                    .font(.system(size:13))
+        ZStack {
+            Button {
+                withAnimation(.spring()) {
+                    isPresented = true
+                }
+            } label: {
+                HStack {
+                    Text("Rate this game:")
+                        .foregroundStyle(Color.gray)
+                        .font(.system(size:13))
+                    ForEach(0..<5) { _ in
+                        Image(systemName: "star.fill")
+                            .foregroundStyle(Color.gray)
+                            .opacity(0.25)
+                            .font(.system(size:13))
+                    }
+                }
             }
         }
     }
 }
 
+
 #Preview {
-    RateThisGameView()
+    RateThisGameView(isPresented: .constant(false))
+    //AddStars(isPresented: .constant(true))
 }

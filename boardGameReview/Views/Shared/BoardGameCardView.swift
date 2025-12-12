@@ -10,6 +10,7 @@ import SDWebImageSwiftUI
 
 struct BoardGameCardView: View {
     let boardGame: BoardGameModel
+    @Binding var showStars : Bool
     var body: some View {
         HStack {
             WebImage(url: URL(string: boardGame.thumbnail ?? "Nothing"))
@@ -21,7 +22,7 @@ struct BoardGameCardView: View {
                 Text(boardGame.name)
                     .font(.system(size:15))
                 WantToPlayButtonView()
-                RateThisGameView()
+                RateThisGameView(isPresented: $showStars)
             }
         }
         .padding()
@@ -46,5 +47,5 @@ struct BoardGameCardView: View {
         description: "Trade, build, and settle the island of Catan.",
         min_age: 10,
         image: "https://example.com/catan-image.jpg"
-    ))
+    ), showStars: .constant(false))
 }
