@@ -7,6 +7,9 @@ enum APIError: Error, LocalizedError {
     case serverError(statusCode: Int, message: String)
     case networkError(Error)
     case unknown
+    case invalidResponse
+    case invalidImageData
+    case httpStatus(Int)
 
     var errorDescription: String? {
         switch self {
@@ -22,6 +25,12 @@ enum APIError: Error, LocalizedError {
             return error.localizedDescription
         case .unknown:
             return "An unknown error occurred."
+        case .invalidResponse:
+            return "The server response was invalid."
+        case .invalidImageData:
+            return "The image data is invalid."
+        case .httpStatus(let statusCode):
+            return "HTTP Error with status code: \(statusCode)."
         }
     }
 }

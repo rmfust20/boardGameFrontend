@@ -19,3 +19,5 @@ struct BoardGameModel: Identifiable, Codable {
     let min_age : Int?
     let image : String?
 }
+
+

@@ -10,21 +10,39 @@ import SDWebImageSwiftUI
 
 struct BoardGameCardView: View {
     let boardGame: BoardGameModel
+    let openGame: (Int) -> Void
     @Binding var showStars : Bool
+    @State var cardImage: UIImage? = nil
+    @ObservedObject var boardGameViewModel = BoardGameViewModel()
     var body: some View {
         HStack {
-            WebImage(url: URL(string: boardGame.thumbnail ?? "Nothing"))
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 100, height: 100)
-                        .clipped()
+            Button {openGame(boardGame.id)} label: {
+                Image(uiImage: cardImage ?? UIImage())
+                    .resizable()
+                    .frame(width:100, height:140)
+                    .scaledToFit()
+            }
+            .onAppear {
+                Task {
+                    boardGameViewModel.boardGame = boardGame
+                    await boardGameViewModel.presentImage()
+                    cardImage = boardGameViewModel.boardGameImage
+                }
+            }
             VStack(alignment: .leading, spacing: 14) {
-                Text(boardGame.name)
-                    .font(.system(size:15))
+                Button {openGame(boardGame.id)} label: {
+                    Text(boardGame.name)
+                        .font(.system(size:15))
+                }
+                .buttonStyle(.plain)
+                Text("by Robert Fusting, Emit Strong")
+                    .font(.system(size:13))
+                    .foregroundStyle(Color.gray)
                 WantToPlayButtonView()
                 RateThisGameView(isPresented: $showStars)
             }
         }
+        
         .padding()
         .padding(.bottom,30)
         .background(
@@ -32,6 +50,7 @@ struct BoardGameCardView: View {
                 .stroke(Color.gray, lineWidth: 1)
                 .opacity(0.5)
         )
+        .padding(.bottom,15)
     }
 }
 
@@ -47,5 +66,5 @@ struct BoardGameCardView: View {
         description: "Trade, build, and settle the island of Catan.",
         min_age: 10,
         image: "https://example.com/catan-image.jpg"
-    ), showStars: .constant(false))
+    ), openGame: {_ in},showStars: .constant(false))
 }

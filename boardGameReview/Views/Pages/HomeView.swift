@@ -12,16 +12,18 @@ struct HomeView: View {
     @State var boardGames: [BoardGameModel] = []
     @State private var showStars: Bool = false
     let userID = 1
+    let openUser: (Int) -> Void
+    let openGame: (Int) -> Void
     var body: some View {
         ZStack {
             ScrollView {
                 LazyVStack {
                     ForEach(boardGames) { boardGame in
-                        BoardGameCardView(boardGame: boardGame, showStars: $showStars)
+                        BoardGameCardView(boardGame: boardGame,openGame: openGame, showStars: $showStars)
                         
                             .onAppear() {
                                 if boardGame.id == boardGames.last?.id {
-                                    Task { boardGames = await boardGameViewModel.fetchBoardGames(userID)
+                                    Task { boardGames = await boardGameViewModel.fetchBoardGamesFromNetwork(userID)
                                     }
                                 }
                             }
@@ -31,7 +33,6 @@ struct HomeView: View {
             .onAppear() {
                 Task {
                     boardGames = await boardGameViewModel.fetchBoardGames(1)
-                    print(boardGames.count)
                 }
             }
             AddStars(isPresented: $showStars)
@@ -95,5 +96,5 @@ struct AddStars: View {
 
 
 #Preview {
-    HomeView()
+    HomeView(openUser: {_ in }, openGame: {_ in })
 }
