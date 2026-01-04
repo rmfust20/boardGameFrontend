@@ -33,6 +33,10 @@ class BoardGameViewModel: ObservableObject {
         
         let diff = feedKeys.filter { key in !boardGames.contains(where: { $0.id == key }) }
         
+        if diff.count == 0 {
+            return boardGames
+        }
+        
         
         
         for i in (0..<(feedKeys.count == 0 ? 25 : feedKeys.count)) {
@@ -96,7 +100,7 @@ class BoardGameViewModel: ObservableObject {
     func presentImage() async {
         let cachedImage = ImageCache.shared.getImage(for: boardGame?.id ?? 0)
         if cachedImage == nil {
-            let networkImage = try? await boardGameService.fetchBoardGameImage(boardGame?.thumbnail ?? "")
+            let networkImage = try? await boardGameService.fetchBoardGameImage(boardGame?.image ?? "")
             if let networkImage = networkImage {
                 //ID is always valid here because we were able to fetch the image from the network
                 ImageCache.shared.storeImage(networkImage, for: boardGame!.id)
@@ -121,5 +125,12 @@ class BoardGameViewModel: ObservableObject {
         else {
             self.boardGame = cachedBoardGame
         }
+    }
+    
+    @MainActor
+    func getBoardGameDesigners(_ id: Int) async -> [String] {
+        let designers = try? await boardGameService.fetchBoardGameDesigners(id)
+        print(designers ?? [])
+        return designers ?? []
     }
 }

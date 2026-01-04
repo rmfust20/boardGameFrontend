@@ -7,7 +7,7 @@ struct BoardGameService {
 
     init(client: APIClient = APIClient.shared) {
         self.client = client
-        self.baseURL = "http://127.0.0.1:8000/"
+        self.baseURL = "http://127.0.0.1:8000"
     }
 
     func fetchBoardGameFeedForUser(_ userID: String, _ url: inout String, _ lastSeenID: Int) async throws -> [BoardGameModel] {
@@ -33,8 +33,9 @@ struct BoardGameService {
             guard !boardGameIds.isEmpty else { return [] }
 
             var components = URLComponents(string: baseURL)
-            components?.path = "boardGames/user/\(userID)/rehydrate"
+            components?.path = "/boardGames/user/\(userID)/rehydrate"
             components?.queryItems = boardGameIds.map { URLQueryItem(name: "board_game_ids", value: String($0)) }
+        
 
             guard let url = components?.url else { throw APIError.invalidURL }
 
@@ -81,6 +82,29 @@ struct BoardGameService {
         }
 
         return image
+    }
+    
+    func fetchBoardGameDesigners(_ boardGameID: Int) async throws -> [String] {
+        var components = URLComponents(string: baseURL)
+        components?.path = "/boardGames/designers/\(boardGameID)"
+        
+        print(components?.url?.absoluteString ?? "no url")
+        guard let url = components?.url else { throw APIError.invalidURL }
+        
+        let (data, response) = try await client.getSession().data(from: url)
+        
+        
+
+        guard let http = response as? HTTPURLResponse else { throw APIError.invalidResponse }
+        guard (200...299).contains(http.statusCode) else { throw APIError.httpStatus(http.statusCode) }
+        
+        print("here")
+        let designers = try JSONDecoder().decode([BoardGameDesingnerModel].self, from: data)
+        print("hello")
+        
+        print(designers)
+        return designers.map { $0.name }.sorted()
+        
     }
 }
 

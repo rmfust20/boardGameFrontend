@@ -11,6 +11,7 @@ struct BoardGameView: View {
     let boardGameID: Int
     @State var cardImage: UIImage? = nil
     @State var boardGame: BoardGameModel? = nil
+    @State var designers: [String] = []
     @ObservedObject var boardGameViewModel = BoardGameViewModel()
     var body: some View {
         ScrollView {
@@ -35,7 +36,12 @@ struct BoardGameView: View {
             .frame(height: 430)
             Text(boardGame?.name ?? "Loading")
                 .font(.title)
-            Text("by Robert Fusting, Emit Strong")
+            Text(designers.joined(separator: ", "))
+                .onAppear {
+                    Task {
+                        designers = await boardGameViewModel.getBoardGameDesigners(boardGameID)
+                    }
+                }
             HStack {
                 ComputedRatingView()
             }
@@ -100,7 +106,7 @@ struct BoardGameView: View {
 }
 
 #Preview {
-    BoardGameView(boardGameID:1, boardGame: BoardGameModel(
+    BoardGameView(boardGameID:181, boardGame: BoardGameModel(
         id: 1,
         name: "Die Macher",
         thumbnail: "https://cf.geekdo-images.com/rpwCZAjYLD940NWwP3SRoA__small/img/YT6svCVsWqLrDitcMEtyazVktbQ=/fit-in/200x150/filters:strip_icc()/pic4718279.jpg",

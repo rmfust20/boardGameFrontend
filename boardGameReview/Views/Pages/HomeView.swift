@@ -8,18 +8,17 @@
 import SwiftUI
 
 struct HomeView: View {
+    @EnvironmentObject private var router: HomeRouter
     @StateObject var boardGameViewModel = BoardGameViewModel()
     @State var boardGames: [BoardGameModel] = []
     @State private var showStars: Bool = false
     let userID = 1
-    let openUser: (Int) -> Void
-    let openGame: (Int) -> Void
     var body: some View {
         ZStack {
             ScrollView {
                 LazyVStack {
                     ForEach(boardGames) { boardGame in
-                        BoardGameCardView(boardGame: boardGame,openGame: openGame, showStars: $showStars)
+                        BoardGameCardView(boardGame: boardGame, showStars: $showStars)
                         
                             .onAppear() {
                                 if boardGame.id == boardGames.last?.id {
@@ -96,5 +95,5 @@ struct AddStars: View {
 
 
 #Preview {
-    HomeView(openUser: {_ in }, openGame: {_ in })
+  HomeView().environmentObject(HomeRouter())
 }

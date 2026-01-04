@@ -14,26 +14,20 @@ enum HomeRoute: Hashable {
 
 struct HomeNavRootView: View {
     @Binding var selectedTab: Tab
-    @State private var path = NavigationPath()
-    var body: some View {
-        NavigationStack(path: $path) {
+    @StateObject private var router = HomeRouter()
 
-                    HomeView(
-                        openUser: { userID in path.append(HomeRoute.userProfile(id: userID)) },
-                        openGame: { gameID in path.append(HomeRoute.boardGame(id: gameID)) }
-                    )
-                    .navigationDestination(for: HomeRoute.self) { route in
-                        switch route {
-                        case .userProfile(let id):
-                            ProfileView(userID: id)
-                        case .boardGame(let id):
-                            BoardGameView(boardGameID: id)
-                        }
+    var body: some View {
+        NavigationStack(path: $router.path) {
+            HomeView()
+                .environmentObject(router)
+                .navigationDestination(for: HomeRoute.self) { route in
+                    switch route {
+                    case .userProfile(let id):
+                        ProfileView(userID: id)
+                    case .boardGame(let id):
+                        BoardGameView(boardGameID: id)
                     }
                 }
+        }
     }
-}
-
-#Preview {
-    //HomeNavRootView()
 }
