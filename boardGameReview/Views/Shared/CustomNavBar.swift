@@ -1,0 +1,34 @@
+//
+//  CustomNavBar.swift
+//  boardGameReview
+//
+//  Created by Robert Fusting on 1/4/26.
+//
+
+import SwiftUI
+
+struct CustomNavBar: ViewModifier {
+    @EnvironmentObject private var router: HomeRouter
+    let trailingTitle: Bool
+    func body(content: Content) -> some View {
+        content
+            .navigationBarBackButtonHidden(true)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button(action: { router.pop() }) {
+                        Image(systemName: "chevron.left")
+                            .font(.system(size: 20, weight: .bold)) // Control size here
+                            .foregroundColor(.black)
+                    }
+                }
+            }
+    }
+}
+
+extension View {
+    func customNavBar(trailingTitle: Bool = false) -> some View {
+        self.modifier(CustomNavBar(trailingTitle: trailingTitle))
+    }
+}
+
+

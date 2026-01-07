@@ -13,6 +13,7 @@ struct BoardGameView: View {
     @State var boardGame: BoardGameModel? = nil
     @State var designers: [String] = []
     @ObservedObject var boardGameViewModel = BoardGameViewModel()
+    @ObservedObject var reviewViewModel = ReviewViewModel()
     var body: some View {
         ScrollView {
             ZStack {
@@ -31,6 +32,7 @@ struct BoardGameView: View {
                     await boardGameViewModel.presentImage()
                     boardGame = boardGameViewModel.boardGame
                     cardImage = boardGameViewModel.boardGameImage
+                    reviewViewModel.boardGameID = boardGameID
                 }
             }
             .frame(height: 430)
@@ -52,7 +54,8 @@ struct BoardGameView: View {
                 .frame(height: 2)
             WantToPlayButtonView()
                 .padding(.bottom,10)
-            RateThisGameFullView()
+            RateThisGameFullView(id: boardGameID)
+            //ReviewButton()
                 //.padding(.bottom,10)
             Rectangle()
                 .fill(Color.gray)

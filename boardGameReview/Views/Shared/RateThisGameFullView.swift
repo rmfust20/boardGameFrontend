@@ -1,26 +1,47 @@
-//
-//  RateThisGameFullView.swift
-//  boardGameReview
-//
-//  Created by Robert Fusting on 12/12/25.
-//
-
 import SwiftUI
 
 struct RateThisGameFullView: View {
+    @EnvironmentObject private var router: HomeRouter
+    @State private var rating: Int = 0   // 0 means “no rating yet”
+    let id : Int
+
     var body: some View {
-        Text("Rate This Game:")
-            .foregroundStyle(Color.gray)
-            .padding(.bottom,5)
-        HStack {
+        VStack(alignment: .leading, spacing: 6) {
+            Text("Rate This Game:")
+                .foregroundStyle(.gray)
+            Stars(rating: $rating)
+        }
+        .padding()
+        
+        if rating > 0 {
+            ReviewButton(id: id, rating: rating)
+        }
+    }
+    
+}
+
+struct Stars : View {
+    @Binding var rating: Int
+    var body: some View {
+        HStack(spacing: 8) {
             ForEach(0..<5) { index in
-                Image(systemName: "star")
-                    .font(.title)
+                Button {
+                    let newRating = index + 1
+                    rating = (rating == newRating) ? 0 : newRating
+                    //TODO network call to update users ratings
+                } label: {
+                    Image(systemName: index < rating ? "star.fill" : "star")
+                        .font(.title)
+                        .foregroundStyle(index < rating ? .yellow : .gray)
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel("Rate \(index + 1) star\(index == 0 ? "" : "s")")
             }
         }
     }
 }
 
 #Preview {
-    RateThisGameFullView()
+    RateThisGameFullView(id: 1)
 }
+

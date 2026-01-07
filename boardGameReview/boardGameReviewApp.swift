@@ -9,6 +9,8 @@ import SwiftUI
 
 @main
 struct boardGameReviewApp: App {
+    @StateObject var boardGameViewModel = BoardGameViewModel()
+    @StateObject var reviewViewModel = ReviewViewModel()
     var body: some Scene {
         WindowGroup {
             BottomNavBarView()

@@ -9,7 +9,8 @@ import SwiftUI
 
 struct HomeView: View {
     @EnvironmentObject private var router: HomeRouter
-    @StateObject var boardGameViewModel = BoardGameViewModel()
+    @ObservedObject var boardGameViewModel = BoardGameViewModel()
+    @ObservedObject var reviewViewModel = ReviewViewModel()
     @State var boardGames: [BoardGameModel] = []
     @State private var showStars: Bool = false
     let userID = 1

@@ -10,6 +10,7 @@ import SwiftUI
 enum HomeRoute: Hashable {
     case userProfile(id: Int)
     case boardGame(id: Int)
+    case addReview(id: Int, rating : Int?)
 }
 
 struct HomeNavRootView: View {
@@ -20,14 +21,33 @@ struct HomeNavRootView: View {
         NavigationStack(path: $router.path) {
             HomeView()
                 .environmentObject(router)
+                // This ensures the back button doesn't carry the "Home" text forward
                 .navigationDestination(for: HomeRoute.self) { route in
-                    switch route {
-                    case .userProfile(let id):
-                        ProfileView(userID: id)
-                    case .boardGame(let id):
-                        BoardGameView(boardGameID: id)
-                    }
+                    viewForRoute(route)
+                        .customNavBar(trailingTitle: trailingTitle(for: route))
+                        // This removes the "Back" text and keeps only the arrow
                 }
         }
+        .environmentObject(router)
+    }
+    @ViewBuilder
+    private func viewForRoute(_ route: HomeRoute) -> some View {
+        switch route {
+        case .userProfile(let id):
+            ProfileView(userID: id)
+        case .boardGame(let id):
+            BoardGameView(boardGameID: id)
+        case .addReview(let id, let rating):
+            AddReviewView(boardGameID: id, rating: rating ?? 0)
+        }
+    }
+}
+
+private func trailingTitle(for route: HomeRoute) -> Bool {
+    switch route {
+    case .addReview:
+        return true
+    default:
+        return false
     }
 }
